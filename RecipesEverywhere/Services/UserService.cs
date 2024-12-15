@@ -27,9 +27,9 @@ namespace RecipesEverywhere.Services
         
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        private RecepiesEverywhere.Models.User _user;
+        private User _user;
         
-        public RecepiesEverywhere.Models.User User
+        public User User
         {
             get => _user;
             private set

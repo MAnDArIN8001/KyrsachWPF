@@ -24,6 +24,26 @@
                        Width="127" 
                        Height="124" 
                        Stretch="Uniform" />
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text=" Avarege Marks:" Style="{StaticResource TitleText}"/>
+                    <TextBlock Text="{Binding AverageMark}" Style="{StaticResource TitleText}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal"
+                            Visibility="{Binding UnMarksVisibility, Converter={StaticResource {x:Type system:Boolean}}}">
+                    <TextBlock Text="Your rate:" Style="{StaticResource TitleText}"/>
+                    <TextBlock Text="{Binding UsersMark}" Style="{StaticResource TitleText}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal"
+                     Visibility="{Binding MarksVisibility, Converter={StaticResource {x:Type system:Boolean}}}">
+                    <Button Content="1" Command="{Binding RateCommand}" CommandParameter="1"/>
+                    <Button Content="2" Command="{Binding RateCommand}" CommandParameter="2"/>
+                    <Button Content="3" Command="{Binding RateCommand}" CommandParameter="3"/>
+                    <Button Content="4" Command="{Binding RateCommand}" CommandParameter="4"/>
+                    <Button Content="5" Command="{Binding RateCommand}" CommandParameter="5"/>
+                </StackPanel>
+
                 <TextBlock Text="{Binding RecipeModel.Text}" Style="{StaticResource InformationText}" Margin="10" TextWrapping="Wrap"/>
                 <Button Style="{StaticResource SubmitButton}" Command="{Binding NavigateCommand}" Content="Update" Width="50" Height="25"
                         Visibility="{Binding UpdateVisibility, Converter={StaticResource {x:Type system:Boolean}}}"/>

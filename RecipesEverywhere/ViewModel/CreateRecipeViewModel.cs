@@ -103,11 +103,12 @@ namespace RecepiesEverywhere.ViewModel
 
         public CreateRecipeViewModel()
         {
-            CreateRecipeCommand = new RelayCommand(UpdateRecipe);
+            CreateRecipeCommand = new RelayCommand(CreateRecipe);
+            _userService = UserService.Instance;
             LoadStatuses();
         }
 
-        private void UpdateRecipe(object sender)
+        private void CreateRecipe(object sender)
         {
 
             if (_title.Trim().Length == 0
@@ -124,12 +125,14 @@ namespace RecepiesEverywhere.ViewModel
                 Title = Title,
                 Text = Text,
                 Picture = Picture,
-                StatusId = StatusId
+                StatusId = StatusId,
+                AuthorId = _userService.User.Id
+
             };
 
             if (!RecipeService.Instance.Create(recipe!))
             {
-                ExceptionMessage = "Something happens wrong"; //Мне лень тут что то делать
+                ExceptionMessage = "Something was wrong"; 
                 return;
             }
             MessageBox.Show("Recipe created successfully!");

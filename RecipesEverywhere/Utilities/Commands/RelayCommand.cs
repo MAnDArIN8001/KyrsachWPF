@@ -7,7 +7,8 @@ namespace RecipesEverywhere.Utilites.Commands
     {
         private readonly Action<object> _execute;
         private readonly Func<object, bool> _canExecute;
-        
+        private Action<int> rate;
+
         public event EventHandler CanExecuteChanged;
 
         public RelayCommand(Action<object> execute, Func<object, bool> canExecute = null)
@@ -15,6 +16,7 @@ namespace RecipesEverywhere.Utilites.Commands
             _execute = execute;
             _canExecute = canExecute;
         }
+
 
         public bool CanExecute(object parameter) => _canExecute is null || _canExecute(parameter);
 

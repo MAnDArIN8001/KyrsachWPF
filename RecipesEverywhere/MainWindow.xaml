@@ -42,7 +42,7 @@
                 <TextBlock Style="{StaticResource NavigationText}" Text="Search recipe" />
             </StackPanel>
             <StackPanel Style="{StaticResource NavigationButton}"
-                        Visibility="{Binding IsUnauthorized, Converter={StaticResource {x:Type system:Boolean}}}">
+                        Visibility="{Binding IsAuthorized, Converter={StaticResource {x:Type system:Boolean}}}">
                 <StackPanel.InputBindings>
                     <MouseBinding Gesture="LeftClick" 
                             Command="{Binding ChangeCurrentPageCommand}" CommandParameter="CreateRecipe" />

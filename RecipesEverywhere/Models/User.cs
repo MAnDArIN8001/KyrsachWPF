@@ -18,4 +18,8 @@ public partial class User
     public virtual ICollection<Recipe> Recipes { get; set; } = new List<Recipe>();
 
     public virtual Role Role { get; set; } = null!;
+
+    public virtual ICollection<Mark> Marks { get; set; } = new List<Mark>();
+
+
 }

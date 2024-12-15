@@ -53,7 +53,7 @@ public partial class RecipeDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("marks_pk");
 
-            entity.Property(e => e.Mark1).HasColumnName("Mark");
+            entity.Property(e => e.MarkValue).HasColumnName("Mark");
 
             entity.HasOne(d => d.Recipe).WithMany(p => p.Marks)
                 .HasForeignKey(d => d.RecipeId)
