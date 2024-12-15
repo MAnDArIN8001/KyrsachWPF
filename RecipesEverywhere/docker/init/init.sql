@@ -4,6 +4,10 @@ CREATE TABLE "Roles"
         CONSTRAINT roles_pk PRIMARY KEY,
     "Name" text UNIQUE NOT NULL
 );
+INSERT INTO "Roles" ("Name")
+VALUES 
+    ('User'),
+    ('Admin');
 
 CREATE TABLE "Users"
 (
@@ -33,7 +37,7 @@ CREATE TABLE "Recipe"
         CONSTRAINT recipes_pk PRIMARY KEY,
     "Title"    text NOT NULL,
     "Text"     text,
-    "Picture"  bytea,
+    "Picture"  text,
     "AuthorId" integer
         CONSTRAINT recipe_users_id_fk REFERENCES "Users" ("Id"),
     "StatusId" integer NOT NULL

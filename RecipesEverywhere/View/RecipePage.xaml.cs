@@ -1,4 +1,5 @@
 ﻿using System.Windows.Controls;
+using RecepiesEverywhere.Models;
 using RecipesEverywhere.Model;
 using RecipesEverywhere.ViewModel;
 
@@ -8,7 +9,7 @@ namespace RecepiesEverywhere.View
     {
         public RecipePageViewModel _recipeViewModel;
         
-        public RecipePage(RecipeModel recipeModel)
+        public RecipePage(Recipe recipeModel)
         {
             InitializeComponent();
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Documents;
 using Microsoft.EntityFrameworkCore;
@@ -119,6 +120,20 @@ namespace RecipesEverywhere.Services
                 return false;
             }
 
+            return true;
+        }
+
+        internal bool CreateRecipe(Recipe recipe)
+        {
+            if (recipe.AuthorId == null)
+                return false;
+
+            using (var context = new RecipeDbContext())
+            {
+                context.Add(recipe);
+                context.SaveChanges();
+
+            }
             return true;
         }
     }

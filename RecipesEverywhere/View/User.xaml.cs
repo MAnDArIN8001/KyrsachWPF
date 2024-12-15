@@ -2,9 +2,9 @@
 
 namespace RecipesEverywhere.View
 {
-    public partial class User : UserControl
+    public partial class UserView : UserControl
     {
-        public User()
+        public UserView()
         {
             InitializeComponent();
         }

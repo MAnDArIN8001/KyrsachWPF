@@ -11,7 +11,7 @@ public partial class User
 
     public string PasswordHash { get; set; } = null!;
 
-    public int RoleId { get; set; }
+    public int RoleId { get; set; } = 2;
 
     public virtual ICollection<Favourite> Favourites { get; set; } = new List<Favourite>();
 

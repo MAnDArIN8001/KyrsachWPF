@@ -15,3 +15,4 @@ services:
       POSTGRES_PASSWORD: "recipesPassword"
       POSTGRES_USER: "recipesUser"
       POSTGRES_DB: "recipesDB"
+

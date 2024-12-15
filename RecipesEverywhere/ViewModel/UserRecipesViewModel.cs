@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using RecepiesEverywhere.Models;
 using RecipesEverywhere.Model;
 using RecipesEverywhere.Services;
 using RecipesEverywhere.Utilites;
@@ -12,14 +13,12 @@ namespace RecipesEverywhere.ViewModel
         private NavigationService _navigationService;
         private RecipeService _recipeService;
         
-        public ObservableCollection<RecipeModel> Recipes { get; private set; } = new();
+        public ObservableCollection<Recipe> Recipes { get; private set; } = new();
 
         public UserRecipesViewModel()
         {
             _recipeService = RecipeService.Instance;
             _navigationService = NavigationService.Instance;
-            
-            
         }
     }
 }

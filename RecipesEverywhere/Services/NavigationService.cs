@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
 using RecepiesEverywhere.Annotations;
+using RecepiesEverywhere.Models;
 using RecepiesEverywhere.View;
 using RecipesEverywhere.Model;
 using RecipesEverywhere.View;
@@ -54,20 +55,23 @@ namespace RecipesEverywhere.Services
                     break;
                 
                 case nameof(User):
-                    CurrentPage = new User();
+                    CurrentPage = new UserView();
                     break;
 
                 case nameof(Search):
                     CurrentPage = new Search();
                     break;
+                case nameof(CreateRecipe):
+                    CurrentPage = new CreateRecipe();
+                    break;
 
                 case nameof(RecipePage):
-                    if (pageParams is not RecipeModel)
+                    if (pageParams is not Recipe)
                     {
                         throw new Exception("To load a recipe page you have to implement a recipe");
                     }
                     
-                    var recipePage = new RecipePage(pageParams as RecipeModel);
+                    var recipePage = new RecipePage(pageParams as Recipe);
                     
                     CurrentPage = recipePage;
                     break;

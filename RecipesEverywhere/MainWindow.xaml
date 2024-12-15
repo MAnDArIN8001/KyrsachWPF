@@ -41,7 +41,14 @@
                 
                 <TextBlock Style="{StaticResource NavigationText}" Text="Search recipe" />
             </StackPanel>
-            
+            <StackPanel Style="{StaticResource NavigationButton}">
+                <StackPanel.InputBindings>
+                    <MouseBinding Gesture="LeftClick" 
+                            Command="{Binding ChangeCurrentPageCommand}" CommandParameter="CreateRecipe" />
+                </StackPanel.InputBindings>
+
+                <TextBlock Style="{StaticResource NavigationText}" Text="Create recipe" />
+            </StackPanel>
             <StackPanel Style="{StaticResource NavigationButton}">
                 <StackPanel.InputBindings>
                     <MouseBinding Gesture="LeftClick" 

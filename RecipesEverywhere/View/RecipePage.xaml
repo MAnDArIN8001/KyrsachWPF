@@ -14,14 +14,19 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    
+
     <Grid Margin="10">
         <ScrollViewer>
             <StackPanel Style="{StaticResource RecipeContent}">
                 <TextBlock Text="{Binding RecipeModel.Title}" Style="{StaticResource TitleText}"/>
-                
+                <Image Source="{Binding RecipeModel.Picture}" 
+                       Width="127" 
+                       Height="124" 
+                       Stretch="Uniform" />
                 <TextBlock Text="{Binding RecipeModel.Text}" Style="{StaticResource InformationText}" Margin="10" TextWrapping="Wrap"/>
             </StackPanel>
+            <Button Style="{StaticResource SubmitButton}" Command="{Binding NavigateCommand}" Content="Search" Width="50" Height="25"/>
+
         </ScrollViewer>
     </Grid>
 </UserControl>
