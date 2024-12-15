@@ -1,0 +1,25 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:RecipesEverywhere.ViewModel">
+    
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="../Styles/RecipeStyle.xaml"></ResourceDictionary>
+        
+    </ResourceDictionary.MergedDictionaries>
+    
+    <local:RecipeViewModel x:Key="RecipeViewModel"></local:RecipeViewModel>
+    
+    <DataTemplate x:Key="RecipeTemplate">
+        <StackPanel Margin="10" Orientation="Horizontal" Style="{StaticResource RecipeCard}">
+            <StackPanel.InputBindings>
+                <MouseBinding Gesture="LeftClick" Command="{Binding NavigationCommand}" CommandParameter="RecipePage"></MouseBinding>
+            </StackPanel.InputBindings>
+            <Image Source="../Pictures/Search.png"/>
+            
+                <StackPanel>
+                    <TextBlock Text="{Binding Title}" Style="{StaticResource RecipeTitle}"/>
+                </StackPanel>
+        </StackPanel>
+    </DataTemplate>
+    
+</ResourceDictionary>
