@@ -97,7 +97,7 @@ namespace RecipesEverywhere.Services
                         return response;
                     }
 
-                    var newUser = new RecepiesEverywhere.Models.User()
+                    var newUser = new User()
                     {
                         Name = authorizationDto.Name,
                         PasswordHash = HashPassword(authorizationDto.Password)

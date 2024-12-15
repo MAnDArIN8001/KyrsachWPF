@@ -15,12 +15,15 @@ namespace RecipesEverywhere.ViewModel
 
         public Recipe RecipeModel => _recipeModelModel;
         public ICommand NavigateCommand { get; private set; }
+        
+        public bool UpdateVisibility {get; private set;}
 
         public RecipePageViewModel(Recipe recipeModelModel)
         {
             _recipeModelModel = recipeModelModel;
             _navigationService = NavigationService.Instance;
             NavigateCommand = new RelayCommand(Navigate);
+            UpdateVisibility = UserService.Instance.User.Id == recipeModelModel.AuthorId;
         }
 
         private void Navigate(object sender)

@@ -69,34 +69,20 @@ namespace RecipesEverywhere.Services
             }
         }
 
-        public async Task<Response<List<Recipe>>> LoadPostsFromUser(int userId)
+        public  List<Recipe> LoadPostsFromUser(int userId)
         {
-            Response<List<Recipe>> response = new();
 
-            try
+            using (var context = new RecipeDbContext())
             {
-                using (var context = new RecipeDbContext())
+                var recipesOfUser = context.Recipes.Where((recipe) => recipe.AuthorId == userId).ToList();
+
+                if (recipesOfUser is null)
                 {
-                    var recipesOfUser =
-                        await context.Recipes.Where((recipe) => recipe.AuthorId == userId).ToListAsync();
-
-                    if (recipesOfUser is null)
-                    {
-                        throw new Exception("User dont have any recipes");
-                    }
-
-                    response.Data = recipesOfUser;
+                    throw new Exception("User dont have any recipes");
                 }
-            }
-            catch (Exception exception)
-            {
-                response.Message = exception.Message;
-                response.Success = false;
-
-                return response;
+                return recipesOfUser;
             }
 
-            return response;
         }
 
         public bool Create(RecipeDTO recipeDto)

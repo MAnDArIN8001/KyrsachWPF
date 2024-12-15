@@ -1,6 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.DirectoryServices.ActiveDirectory;
-using RecipesEverywhere.Model;
 using RecipesEverywhere.Services;
 
 namespace RecipesEverywhere.ViewModel

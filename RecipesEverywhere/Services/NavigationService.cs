@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Windows.Controls;
+﻿
+
 using RecepiesEverywhere.Annotations;
 using RecepiesEverywhere.Models;
 using RecepiesEverywhere.View;
-using RecipesEverywhere.Model;
 using RecipesEverywhere.View;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Windows.Controls;
 
 namespace RecipesEverywhere.Services
 {
@@ -44,11 +43,12 @@ namespace RecipesEverywhere.Services
                 { nameof(Registration), _ => new Registration() },
                 { nameof(Authorization), _ => new Authorization() },
                 { nameof(Home), _ => new Home() },
-                { nameof(User), _ => new UserView() },
+                { nameof(UserView), _ => new UserView() },
                 { nameof(Search), _ => new Search() },
                 { nameof(CreateRecipe), _ => new CreateRecipe() },
                 { nameof(RecipePage), CreateRecipePage },
                 { nameof(UpdateRecipe), (param) => new UpdateRecipe((Recipe)param) },
+                { nameof(UserRecipes), _ => new UserRecipes() },
             };
         }
 

@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using RecipesEverywhere.ViewModel;
+using System.Windows.Controls;
 
 namespace RecepiesEverywhere.View
 {
@@ -7,6 +8,7 @@ namespace RecepiesEverywhere.View
         public UserRecipes()
         {
             InitializeComponent();
+            DataContext = new UserRecipesViewModel();
         }
     }
 }

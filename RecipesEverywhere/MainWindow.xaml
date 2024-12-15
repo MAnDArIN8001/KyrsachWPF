@@ -83,7 +83,7 @@
                         Visibility="{Binding IsAuthorized, Converter={StaticResource {x:Type system:Boolean}}}">
                 <StackPanel.InputBindings>
                     <MouseBinding Gesture="LeftClick" 
-                                  Command="{Binding ChangeCurrentPageCommand}" CommandParameter="User" />
+                                  Command="{Binding ChangeCurrentPageCommand}" CommandParameter="UserView" />
                 </StackPanel.InputBindings>
                 
                 <TextBlock Style="{StaticResource NavigationText}" Text="You're profile" />
@@ -91,6 +91,11 @@
             
             <StackPanel Style="{StaticResource NavigationButton}" 
                         Visibility="{Binding IsAuthorized, Converter={StaticResource {x:Type system:Boolean}}}">
+                <StackPanel.InputBindings>
+                    <MouseBinding Gesture="LeftClick" 
+                                  Command="{Binding ChangeCurrentPageCommand}" CommandParameter="UserRecipes" />
+                </StackPanel.InputBindings>
+
                 <TextBlock Style="{StaticResource NavigationText}" Text="My recipes" />
             </StackPanel>
         </StackPanel>

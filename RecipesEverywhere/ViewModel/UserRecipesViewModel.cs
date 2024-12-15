@@ -10,15 +10,18 @@ namespace RecipesEverywhere.ViewModel
     {
         private int _userId = UserService.Instance.User.Id;
         
-        private NavigationService _navigationService;
         private RecipeService _recipeService;
-        
-        public ObservableCollection<Recipe> Recipes { get; private set; } = new();
-
+        public ObservableCollection<RecipeViewModel> Recipes { get; set; } = new();
         public UserRecipesViewModel()
         {
             _recipeService = RecipeService.Instance;
-            _navigationService = NavigationService.Instance;
+            var recipes = _recipeService.LoadPostsFromUser(_userId);
+            foreach (var recipe in recipes)
+            {
+                var recipeVM = new RecipeViewModel(recipe);
+
+                Recipes.Add(recipeVM);
+            }
         }
     }
 }

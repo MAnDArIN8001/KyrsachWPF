@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace RecipesEverywhere.Properties
+namespace RecepiesEverywhere.Properties
 {
 
 
