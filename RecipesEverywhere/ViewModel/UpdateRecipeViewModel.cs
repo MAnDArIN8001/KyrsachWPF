@@ -18,18 +18,16 @@ using RecipesEverywhere.Utilites;
 
 namespace RecepiesEverywhere.ViewModel
 {
-    internal class CreateRecipeViewModel
+    internal class UpdateRecipeViewModel
     {
-        private string _title;
-        private string _text;
-        private string _picture;
-        private int _statusId;
+
         private ObservableCollection<Models.Status> _statuses;
         private string _exceptionMessage;
 
         private UserService _userService;
         private RecipeService _recipeService;
 
+        private Recipe _recipe;
 
         public string ExceptionMessage
         {
@@ -43,40 +41,40 @@ namespace RecepiesEverywhere.ViewModel
 
         public string Title
         {
-            get => _title;
+            get => _recipe.Title;
             set
             {
-                _title = value;
+                _recipe.Title = value;
                 OnPropertyChanged();
             }
         }
 
         public string Text
         {
-            get => _text;
+            get => _recipe.Text;
             set
             {
-                _text = value;
+                _recipe.Text = value;
                 OnPropertyChanged();
             }
         }
 
         public string Picture
         {
-            get => _picture;
+            get => _recipe.Picture;
             set
             {
-                _picture = value;
+                _recipe.Picture = value;
                 OnPropertyChanged();
             }
         }
 
         public int StatusId
         {
-            get => _statusId;
+            get => _recipe.StatusId;
             set
             {
-                _statusId = value;
+                _recipe.StatusId = value;
                 OnPropertyChanged();
             }
         }
@@ -101,33 +99,25 @@ namespace RecepiesEverywhere.ViewModel
         public ICommand CreateRecipeCommand { get; }
 
 
-        public CreateRecipeViewModel()
+        public UpdateRecipeViewModel(Recipe recipe)
         {
-            CreateRecipeCommand = new RelayCommand(UpdateRecipe);
+            _recipe = recipe;
+            CreateRecipeCommand = new RelayCommand(CreateRecipe);
             LoadStatuses();
         }
 
-        private void UpdateRecipe(object sender)
+        private void CreateRecipe(object sender)
         {
 
-            if (_title.Trim().Length == 0
-                || _text.Trim().Length == 0
-                || _text.Trim().Length == 0
-                || _picture.Trim().Length == 0)
+            if (_recipe.Title.Trim().Length == 0
+                || _recipe.Text?.Trim().Length == 0
+                || _recipe.Picture?.Trim().Length == 0)
             {
                 ExceptionMessage = "All fields must be entered";
 
             }
 
-            var recipe = new Recipe
-            {
-                Title = Title,
-                Text = Text,
-                Picture = Picture,
-                StatusId = StatusId
-            };
-
-            if (!RecipeService.Instance.Create(recipe!))
+            if (!RecipeService.Instance.Update(_recipe!))
             {
                 ExceptionMessage = "Something happens wrong"; //Мне лень тут что то делать
                 return;

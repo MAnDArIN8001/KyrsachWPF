@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
@@ -19,7 +20,7 @@ namespace RecipesEverywhere.Services
         public static NavigationService Instance => _instance ??= new NavigationService();
 
         #endregion
-        
+
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private UserControl _currentPage;
@@ -34,54 +35,42 @@ namespace RecipesEverywhere.Services
             }
         }
 
-        private NavigationService() {}
+        private readonly Dictionary<string, Func<object?, UserControl>> _pageFactories;
+
+        private NavigationService()
+        {
+            _pageFactories = new Dictionary<string, Func<object?, UserControl>>
+            {
+                { nameof(Registration), _ => new Registration() },
+                { nameof(Authorization), _ => new Authorization() },
+                { nameof(Home), _ => new Home() },
+                { nameof(User), _ => new UserView() },
+                { nameof(Search), _ => new Search() },
+                { nameof(CreateRecipe), _ => new CreateRecipe() },
+                { nameof(RecipePage), CreateRecipePage },
+                { nameof(UpdateRecipe), (param) => new UpdateRecipe((Recipe)param) },
+            };
+        }
 
         public UserControl TryChangePage(string pageName, object? pageParams = null)
         {
-            UserControl response = null;
-
-            switch (pageName)
+            if (_pageFactories.TryGetValue(pageName, out var factory))
             {
-                case nameof(Registration):
-                    CurrentPage = new Registration();
-                    break;
-                
-                case nameof(Authorization):
-                    CurrentPage = new Authorization();
-                    break;
-                
-                case nameof(Home):
-                    CurrentPage = new Home();
-                    break;
-                
-                case nameof(User):
-                    CurrentPage = new UserView();
-                    break;
-
-                case nameof(Search):
-                    CurrentPage = new Search();
-                    break;
-                case nameof(CreateRecipe):
-                    CurrentPage = new CreateRecipe();
-                    break;
-
-                case nameof(RecipePage):
-                    if (pageParams is not Recipe)
-                    {
-                        throw new Exception("To load a recipe page you have to implement a recipe");
-                    }
-                    
-                    var recipePage = new RecipePage(pageParams as Recipe);
-                    
-                    CurrentPage = recipePage;
-                    break;
-                    
-                default:
-                    throw new Exception("Invalid page");
-                    break;
+                CurrentPage = factory(pageParams);
+                return CurrentPage;
             }
 
-            return CurrentPage;
+            throw new Exception("Invalid page");
+        }
+
+        private UserControl CreateRecipePage(object? pageParams)
+        {
+            if (pageParams is not Recipe recipe)
+            {
+                throw new Exception("To load a recipe page you have to implement a recipe");
+            }
+
+            return new RecipePage(recipe);
         }
 
         [NotifyPropertyChangedInvocator]

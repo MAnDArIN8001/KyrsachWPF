@@ -24,7 +24,7 @@ namespace RecipesEverywhere.Services
 
         private RecipeService() { }
 
-        public List<Recipe> LoadAllRecipes()
+        public List<Recipe> LoadAll()
         {
             using (var context = new RecipeDbContext())
             {
@@ -32,7 +32,7 @@ namespace RecipesEverywhere.Services
             }
         }
 
-        public Recipe LoadRecipe(int recipeId)
+        public Recipe Load(int recipeId)
         {
             using (var context = new RecipeDbContext())
             {
@@ -99,7 +99,7 @@ namespace RecipesEverywhere.Services
             return response;
         }
 
-        public bool CreateRecipe(RecipeDTO recipeDto)
+        public bool Create(RecipeDTO recipeDto)
         {
             try
             {
@@ -123,7 +123,7 @@ namespace RecipesEverywhere.Services
             return true;
         }
 
-        internal bool CreateRecipe(Recipe recipe)
+        internal bool Create(Recipe recipe)
         {
             if (recipe.AuthorId == null)
                 return false;
@@ -133,6 +133,18 @@ namespace RecipesEverywhere.Services
                 context.Add(recipe);
                 context.SaveChanges();
 
+            }
+            return true;
+        }
+        internal bool Update(Recipe recipe)
+        {
+            if (recipe.AuthorId == null)
+                return false;
+
+            using (var context = new RecipeDbContext())
+            {
+                context.Update(recipe);
+                context.SaveChanges();
             }
             return true;
         }

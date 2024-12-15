@@ -24,8 +24,8 @@
                        Height="124" 
                        Stretch="Uniform" />
                 <TextBlock Text="{Binding RecipeModel.Text}" Style="{StaticResource InformationText}" Margin="10" TextWrapping="Wrap"/>
+                <Button Style="{StaticResource SubmitButton}" Command="{Binding NavigateCommand}" Content="Update" Width="50" Height="25"/>
             </StackPanel>
-            <Button Style="{StaticResource SubmitButton}" Command="{Binding NavigateCommand}" Content="Search" Width="50" Height="25"/>
 
         </ScrollViewer>
     </Grid>

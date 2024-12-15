@@ -20,7 +20,7 @@ namespace RecipesEverywhere.ViewModel
 
         private async void LoadRecipes()
         {
-            var recipes = _recipeService.LoadAllRecipes();
+            var recipes = _recipeService.LoadAll();
 
             if (recipes is null)
             {
