@@ -30,7 +30,7 @@ namespace RecipesEverywhere.ViewModel
 
         public UserControl CurrentPage => _navigationService.CurrentPage;
 
-        public RecepiesEverywhere.Models.User CurrentUser => _userService.User;
+        public User CurrentUser => _userService.User;
         
         public MainPageViewModel()
         {
