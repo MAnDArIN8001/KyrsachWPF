@@ -23,5 +23,8 @@ public partial class Recipe
 
     public virtual ICollection<Mark> Marks { get; set; } = new List<Mark>();
 
+    public virtual ICollection<Tag> Tags { get; set; } = new List<Tag>();
+
+
     public virtual Status Status { get; set; } = null!;
 }

@@ -28,9 +28,12 @@ namespace RecepiesEverywhere.ViewModel
         private ObservableCollection<Models.Status> _statuses;
         private string _exceptionMessage;
 
+
         private UserService _userService;
         private RecipeService _recipeService;
 
+        public ObservableCollection<Tag> Tags { get; set; } = new(); // Collection of tags
+        public Tag SelectedTags { get; set; } = null; // Collection of selected tags
 
         public string ExceptionMessage
         {
@@ -107,7 +110,23 @@ namespace RecepiesEverywhere.ViewModel
             CreateRecipeCommand = new RelayCommand(CreateRecipe);
             _userService = UserService.Instance;
             LoadStatuses();
+            LoadTags();
         }
+
+        private void LoadTags()
+        {
+            using (var context = new RecipeDbContext())
+            {
+                var tags = context.Tags.ToList();
+                Tags.Clear();
+                foreach (Tag tag in tags)
+                {
+
+                    Tags.Add(tag);
+                }
+            }
+        }
+
 
         private void CreateRecipe(object sender)
         {
@@ -115,7 +134,8 @@ namespace RecepiesEverywhere.ViewModel
             if (string.IsNullOrWhiteSpace(_title)
                 || string.IsNullOrWhiteSpace(_text)
                 || string.IsNullOrWhiteSpace(_picture)
-                || _statusId == default)
+                || _statusId == default
+                || SelectedTags == null)
             {
                 
                 ExceptionMessage = "All fields must be entered";
@@ -128,7 +148,8 @@ namespace RecepiesEverywhere.ViewModel
                 Text = Text,
                 Picture = Picture,
                 StatusId = StatusId,
-                AuthorId = _userService.User.Id
+                AuthorId = _userService.User.Id,
+                Tags = new List<Tag>() { SelectedTags} 
 
             };
 

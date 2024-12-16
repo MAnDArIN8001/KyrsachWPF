@@ -29,6 +29,17 @@ namespace RecepiesEverywhere.ViewModel
 
         private Recipe _recipe;
 
+        public ObservableCollection<Tag> Tags { get; set; } = new(); // Collection of tags
+        public Tag SelectedTags
+        {
+            get => _recipe.Tags.FirstOrDefault();
+            set
+            {
+                _recipe.Tags = new List<Tag>() { value};
+                OnPropertyChanged();
+            }
+        }
+
         public string ExceptionMessage
         {
             get => _exceptionMessage;
@@ -104,6 +115,29 @@ namespace RecepiesEverywhere.ViewModel
             _recipe = recipe;
             CreateRecipeCommand = new RelayCommand(Update);
             LoadStatuses();
+            LoadTags(recipe);
+        }
+
+
+        private void LoadTags(Recipe recipe)
+        {
+            using (var context = new RecipeDbContext())
+            {
+                var tags = context.Tags.ToList();
+                SelectedTags = context.Recipes
+                    .Where(r => r.Id == recipe.Id)
+                    .Include(r => r.Tags)
+                    .SelectMany(r => r.Tags) // Извлекаем все теги
+                    .FirstOrDefault(); // Получаем первый тег или null // Получаем коллекцию тегов; // Получаем первый рецепт или null
+
+
+                Tags.Clear();
+                foreach (Tag tag in tags)
+                {
+
+                    Tags.Add(tag);
+                }
+            }
         }
 
         private void Update(object sender)

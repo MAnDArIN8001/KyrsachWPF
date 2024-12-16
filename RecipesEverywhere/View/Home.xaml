@@ -37,7 +37,13 @@
                      Style="{StaticResource InputField}" Height="25" Margin="0,0,10,0" />
 
                     <Button Grid.Column="1" Style="{StaticResource SubmitButton}" Command="{Binding SearchCommand}" Content="Search" Width="50" Height="25"/>
+ 
                 </Grid>
+                <ComboBox ItemsSource="{Binding Tags}" 
+                        SelectedItem="{Binding SelectedTags}" 
+                        DisplayMemberPath="Name" 
+                        Margin="0,10,0,0" 
+                        Height="20"/>
                 <ItemsControl ItemsSource="{Binding Recipes}" ItemTemplate="{StaticResource RecipeTemplate}" />
                 <StackPanel Orientation="Horizontal">
                     <Button Style="{StaticResource SubmitButton}" Command="{Binding PreviousPageCommand}" Content="Prev" Width="50" Height="25"/>

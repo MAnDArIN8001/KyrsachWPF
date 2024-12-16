@@ -19,6 +19,12 @@
             <TextBlock Text="Title" Style="{StaticResource InputLabel}" />
             <TextBox Text="{Binding Title}" Style="{StaticResource InputField}" />
 
+            <ComboBox ItemsSource="{Binding Tags}" 
+                        SelectedItem="{Binding SelectedTags}" 
+                        DisplayMemberPath="Name" 
+                        Margin="0,10,0,0" 
+                        Height="20"/>
+
             <TextBlock Text="Text"  Style="{StaticResource InputLabel}" />
             <TextBox Text="{Binding Text}" Style="{StaticResource InputField}" Height="100" AcceptsReturn="True" TextWrapping="Wrap" />
 

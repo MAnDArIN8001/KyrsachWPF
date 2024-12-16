@@ -10,11 +10,13 @@ namespace RecipesEverywhere.ViewModel
     public class HomeViewModel : Utilites.ViewModelBase
     {
         public ObservableCollection<RecipeViewModel> Recipes { get; set; } = new();
+        public ObservableCollection<Tag> Tags { get; set; } = new(); // Collection of tags
+        public Tag SelectedTags { get; set; } = new(); // Collection of selected tags
 
         private const int RecipesInPages = 5;
         private List<List<Recipe>> _pages;
         private RecipeService _recipeService;
-        private string _query;
+        private string _query = string.Empty;
         private int _pageIndex;
         public string Query
         {
@@ -38,6 +40,21 @@ namespace RecipesEverywhere.ViewModel
             NextPageCommand = new RelayCommand(NextPage);
             PreviousPageCommand = new RelayCommand(PreviousPage);
             LoadRecipes();
+            LoadTags();
+        }
+
+        private void LoadTags()
+        {
+            using(var context = new RecipeDbContext())
+            {
+                var tags = context.Tags.ToList();
+                Tags.Clear();
+                foreach (Tag tag in tags)
+                {
+
+                    Tags.Add(tag);
+                }
+            }
         }
 
         private void NextPage(object obj)
@@ -64,8 +81,12 @@ namespace RecipesEverywhere.ViewModel
         }
         static List<List<T>> SplitList<T>(List<T> list, int n)
         {
+            if(list.Count == 0)
+            {
+                return new List<List<T>> { new List<T>() };
+            }
             List<List<T>> sublists = new List<List<T>>();
-
+            
             for (int i = 0; i < list.Count; i += n)
             {
                 List<T> sublist = list.GetRange(i, Math.Min(n, list.Count - i));
@@ -91,7 +112,7 @@ namespace RecipesEverywhere.ViewModel
 
         private void SearchRecipes(object sender) 
         {
-            var recipes = _recipeService.Search(_query);
+            var recipes = _recipeService.Search(_query, SelectedTags);
             _pages = SplitList(recipes, RecipesInPages);
             _pageIndex = 0;
             UpdateRecipesView(_pages[_pageIndex]);

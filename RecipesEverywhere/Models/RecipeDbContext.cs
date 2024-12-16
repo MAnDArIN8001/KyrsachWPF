@@ -27,6 +27,8 @@ public partial class RecipeDbContext : DbContext
 
     public virtual DbSet<User> Users { get; set; }
 
+    public virtual DbSet<Tag> Tags { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseNpgsql("Host=localhost;Port=5433;Database=recipesDB;Username=recipesUser;Password=recipesPassword");
 
@@ -75,6 +77,18 @@ public partial class RecipeDbContext : DbContext
                 .HasForeignKey(d => d.StatusId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("recipe_statuses_id_fk");
+
+            entity.HasMany(d => d.Tags) // Добавлено для связи с Tag
+                    .WithMany(p => p.Recipes)
+                    .UsingEntity(j => j.ToTable("RecipeTags")); 
+        });
+
+
+        modelBuilder.Entity<Tag>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("tags_pk");
+
+            entity.ToTable("Tag");
         });
 
         modelBuilder.Entity<Role>(entity =>

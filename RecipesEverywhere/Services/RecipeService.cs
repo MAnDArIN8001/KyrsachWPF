@@ -174,18 +174,67 @@ namespace RecipesEverywhere.Services
             {
                 try
                 {
-                    context.Update(recipe);
+                    var recipebd = context.Recipes
+                        .Include(r => r.Tags)
+                        .FirstOrDefault(r => r.Id == recipe.Id);
+                    // Удаляем все существующие теги
+                    recipebd.Tags.Clear();
+
+                    // Добавляем новые теги
+                    foreach (var tag in recipe.Tags)
+                    {
+                        recipebd.Tags.Add(tag);
+
+                    }
+
+                    recipebd.Tags = recipe.Tags;
+                    recipebd.Picture = recipe.Picture;
+                    recipebd.StatusId = recipe.StatusId;
+                    recipebd.Text = recipe.Text;
+                    recipebd.Title = recipe.Title;
                     context.SaveChanges();
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message);
+                    MessageBox.Show(ex.InnerException.Message);
                     return false;
                 }
             }
             return true;
         }
 
+        internal List<Recipe> Search(string query, Tag? tag = null)
+        {
+            if(tag == null)
+            {
+                Search(query);
+            }
+            using (var context = new RecipeDbContext())
+            {
+                try
+                {
+                    if(query == string.Empty)
+                    {
+                        return context.Recipes.Include(r => r.Tags)
+                            .Where(FilterAvailableRecipes)
+                            .Where(recipe => recipe.Tags.Any(t => t.Name == tag.Name))
+                            .ToList();
+                    }
+                    query = query.ToLower();
+                    var recipes = context.Recipes.Include(r => r.Tags)
+                        .Where(FilterAvailableRecipes)
+                        .Where(recipe => recipe.Title.ToLower().Contains(query) && recipe.Tags.Any(t => t.Name == tag.Name))
+                        .ToList();
+                    return recipes;
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    return null;
+                }
+            }
+
+        }
         internal List<Recipe> Search(string query)
         {
             using (var context = new RecipeDbContext())
@@ -193,13 +242,13 @@ namespace RecipesEverywhere.Services
                 try
                 {
                     query = query.ToLower();
-                    var recipes = context.Recipes
+                    var recipes = context.Recipes.Include(r => r.Tags)
                         .Where(FilterAvailableRecipes)
-                        .Where(recipeDb => recipeDb.Title.ToLower().Contains(query))
+                        .Where(recipe => recipe.Title.ToLower().Contains(query))
                         .ToList();
                     return recipes;
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message);
                     return null;
