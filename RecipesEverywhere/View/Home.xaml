@@ -39,6 +39,11 @@
                     <Button Grid.Column="1" Style="{StaticResource SubmitButton}" Command="{Binding SearchCommand}" Content="Search" Width="50" Height="25"/>
                 </Grid>
                 <ItemsControl ItemsSource="{Binding Recipes}" ItemTemplate="{StaticResource RecipeTemplate}" />
+                <StackPanel Orientation="Horizontal">
+                    <Button Style="{StaticResource SubmitButton}" Command="{Binding PreviousPageCommand}" Content="Prev" Width="50" Height="25"/>
+                    <Button Style="{StaticResource SubmitButton}" Command="{Binding NextPageCommand}" Content="Next" Width="50" Height="25"/>
+
+                </StackPanel>
             </StackPanel>
         </ScrollViewer>
     </Grid>

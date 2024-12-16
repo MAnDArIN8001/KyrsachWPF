@@ -11,9 +11,11 @@ namespace RecipesEverywhere.ViewModel
     {
         public ObservableCollection<RecipeViewModel> Recipes { get; set; } = new();
 
+        private const int RecipesInPages = 5;
+        private List<List<Recipe>> _pages;
         private RecipeService _recipeService;
         private string _query;
-
+        private int _pageIndex;
         public string Query
         {
             get => _query;
@@ -25,22 +27,53 @@ namespace RecipesEverywhere.ViewModel
         }
 
         public ICommand SearchCommand { get; set; }
+        public ICommand NextPageCommand { get; set; }
+        public ICommand PreviousPageCommand { get; set; }
 
 
         public HomeViewModel()
         {
             _recipeService = RecipeService.Instance;
             SearchCommand = new RelayCommand(SearchRecipes);
+            NextPageCommand = new RelayCommand(NextPage);
+            PreviousPageCommand = new RelayCommand(PreviousPage);
             LoadRecipes();
+        }
+
+        private void NextPage(object obj)
+        {
+            if (_pageIndex >= _pages.Count - 1)
+                return;
+            _pageIndex++;
+            UpdateRecipesView(_pages[_pageIndex]);
+        }
+
+        private void PreviousPage(object obj)
+        {
+            if (_pageIndex <= 0)
+                return;
+            _pageIndex--;
+            UpdateRecipesView(_pages[_pageIndex]);
         }
 
         private void LoadRecipes()
         {
             var recipes = _recipeService.LoadAll();
-
-            UpdateRecipesView(recipes);
+            _pages = SplitList(recipes, RecipesInPages);
+            UpdateRecipesView(_pages[_pageIndex]);
         }
+        static List<List<T>> SplitList<T>(List<T> list, int n)
+        {
+            List<List<T>> sublists = new List<List<T>>();
 
+            for (int i = 0; i < list.Count; i += n)
+            {
+                List<T> sublist = list.GetRange(i, Math.Min(n, list.Count - i));
+                sublists.Add(sublist);
+            }
+
+            return sublists;
+        }
         private void UpdateRecipesView(List<Recipe>? recipes)
         {
             if (recipes is null)
@@ -59,7 +92,9 @@ namespace RecipesEverywhere.ViewModel
         private void SearchRecipes(object sender) 
         {
             var recipes = _recipeService.Search(_query);
-            UpdateRecipesView(recipes);
+            _pages = SplitList(recipes, RecipesInPages);
+            _pageIndex = 0;
+            UpdateRecipesView(_pages[_pageIndex]);
         }
     }
 }
