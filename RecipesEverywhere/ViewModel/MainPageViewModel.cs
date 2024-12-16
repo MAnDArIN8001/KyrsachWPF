@@ -23,8 +23,8 @@ namespace RecipesEverywhere.ViewModel
 
         private MainWindow _mainWindow;
 
-        public bool IsAuthorized => _userService.User is not null;
-        public bool IsUnauthorized => !IsAuthorized;
+        public bool IsAuthorized => _userService.IsAuthorized;
+        public bool IsUnauthorized => !_userService.IsAuthorized;
 
         public ICommand ChangeCurrentPageCommand { get; private set; }
 

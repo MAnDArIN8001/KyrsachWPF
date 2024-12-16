@@ -1,6 +1,6 @@
 ﻿namespace RecipesEverywhere.Model.Enum
 {
-    public enum Status
+    public enum StatusEnum
     {
         Private = 1, 
         Public = 2

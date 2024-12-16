@@ -23,9 +23,23 @@
         <vm:HomeViewModel />
     </UserControl.DataContext>
     
-    <Grid>
+    <Grid Height="314" Width="483">
+
         <ScrollViewer>
-            <ItemsControl ItemsSource="{Binding Recipes}" ItemTemplate="{StaticResource RecipeTemplate}" />
+            <StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox Grid.Column="0" Text="{Binding Query, UpdateSourceTrigger=PropertyChanged}"
+                     Style="{StaticResource InputField}" Height="25" Margin="0,0,10,0" />
+
+                    <Button Grid.Column="1" Style="{StaticResource SubmitButton}" Command="{Binding SearchCommand}" Content="Search" Width="50" Height="25"/>
+                </Grid>
+                <ItemsControl ItemsSource="{Binding Recipes}" ItemTemplate="{StaticResource RecipeTemplate}" />
+            </StackPanel>
         </ScrollViewer>
     </Grid>
 </UserControl>

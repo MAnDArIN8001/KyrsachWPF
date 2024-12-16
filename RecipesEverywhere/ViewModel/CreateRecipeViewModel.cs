@@ -15,10 +15,11 @@ using RecipesEverywhere.Model.Enum;
 using System.Collections.ObjectModel;
 using RecipesEverywhere.Services;
 using RecipesEverywhere.Utilites;
+using RecepiesEverywhere.Annotations;
 
 namespace RecepiesEverywhere.ViewModel
 {
-    internal class CreateRecipeViewModel
+    internal class CreateRecipeViewModel : ViewModelBase
     {
         private string _title;
         private string _text;
@@ -37,7 +38,7 @@ namespace RecepiesEverywhere.ViewModel
             set
             {
                 _exceptionMessage = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(ExceptionMessage));
             }
         }
 
@@ -111,13 +112,14 @@ namespace RecepiesEverywhere.ViewModel
         private void CreateRecipe(object sender)
         {
 
-            if (_title.Trim().Length == 0
-                || _text.Trim().Length == 0
-                || _text.Trim().Length == 0
-                || _picture.Trim().Length == 0)
+            if (string.IsNullOrWhiteSpace(_title)
+                || string.IsNullOrWhiteSpace(_text)
+                || string.IsNullOrWhiteSpace(_picture)
+                || _statusId == default)
             {
+                
                 ExceptionMessage = "All fields must be entered";
-
+                return;
             }
 
             var recipe = new Recipe
@@ -138,13 +140,6 @@ namespace RecepiesEverywhere.ViewModel
             MessageBox.Show("Recipe created successfully!");
 
 
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

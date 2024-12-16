@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Update.Internal;
+using RecepiesEverywhere.Annotations;
 using RecepiesEverywhere.Models;
 using RecepiesEverywhere.View;
 using RecipesEverywhere.Model;
@@ -54,11 +55,11 @@ namespace RecipesEverywhere.ViewModel
         private bool _marksVisibility;
         public bool UnMarksVisibility
         {
-            get => !_marksVisibility;
+            get => !_marksVisibility && UserService.Instance.IsAuthorized;
         }
         public bool MarksVisibility
         {
-            get => _marksVisibility;
+            get => _marksVisibility && UserService.Instance.IsAuthorized;
             private set
             {
                 if (_marksVisibility != value)
@@ -163,7 +164,7 @@ namespace RecipesEverywhere.ViewModel
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-
+        [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

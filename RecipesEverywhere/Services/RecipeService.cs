@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using RecepiesEverywhere.Models;
 using RecipesEverywhere.Model;
 using RecipesEverywhere.Model.DTO;
+using RecipesEverywhere.Model.Enum;
 using RecipesEverywhere.Utilites;
 
 namespace RecipesEverywhere.Services
@@ -21,14 +22,14 @@ namespace RecipesEverywhere.Services
         public static RecipeService Instance => _instance ??= new RecipeService();
 
         #endregion
-
+        public User user => UserService.Instance.User;
         private RecipeService() { }
-
+        private bool FilterAvailableRecipes(Recipe recipe) => user.Id == recipe.AuthorId || recipe.StatusId == (int)StatusEnum.Public;
         public List<Recipe> LoadAll()
         {
             using (var context = new RecipeDbContext())
             {
-                return context.Recipes.ToList();
+                return context.Recipes.Include(r => r.Status).Where(FilterAvailableRecipes).ToList();
             }
         }
 
@@ -36,7 +37,7 @@ namespace RecipesEverywhere.Services
         {
             using (var context = new RecipeDbContext())
             {
-                var recipe = context.Recipes.FirstOrDefault(recipeDb => recipeDb.Id == recipeId);
+                var recipe = context.Recipes.Where(FilterAvailableRecipes).FirstOrDefault(recipeDb => recipeDb.Id == recipeId);
 
                 return recipe;
             }
@@ -133,6 +134,19 @@ namespace RecipesEverywhere.Services
                 context.SaveChanges();
             }
             return true;
+        }
+
+        internal List<Recipe> Search(string query)
+        {
+            using (var context = new RecipeDbContext())
+            {
+                query = query.ToLower();
+                var recipes = context.Recipes
+                    .Where(FilterAvailableRecipes)
+                    .Where(recipeDb => recipeDb.Title.ToLower().Contains(query))
+                    .ToList();
+                return recipes;
+            }
         }
     }
 }

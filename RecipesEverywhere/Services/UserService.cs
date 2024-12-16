@@ -28,10 +28,10 @@ namespace RecipesEverywhere.Services
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private User _user;
-        
+        public bool IsAuthorized => User.Name != null;
         public User User
         {
-            get => _user;
+            get => _user ??= new User();
             private set
             {
                 _user = value;
