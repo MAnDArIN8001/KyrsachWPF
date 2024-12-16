@@ -44,7 +44,6 @@ namespace RecipesEverywhere.Services
                 { nameof(Authorization), _ => new Authorization() },
                 { nameof(Home), _ => new Home() },
                 { nameof(UserView), _ => new UserView() },
-                { nameof(Search), _ => new Search() },
                 { nameof(CreateRecipe), _ => new CreateRecipe() },
                 { nameof(RecipePage), CreateRecipePage },
                 { nameof(UpdateRecipe), (param) => new UpdateRecipe((Recipe)param) },

@@ -6,6 +6,7 @@ using RecepiesEverywhere.View;
 using RecipesEverywhere.Model;
 using RecipesEverywhere.Services;
 using RecipesEverywhere.Utilites.Commands;
+using RecipesEverywhere.View;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
@@ -17,7 +18,7 @@ namespace RecipesEverywhere.ViewModel
         private float _averageMark = 0;
         private float _usersMark = 0;
 
-        private readonly Recipe _recipeModelModel;
+        private readonly Recipe _recipeModel;
         private NavigationService _navigationService;
 
         public float AverageMark
@@ -33,9 +34,10 @@ namespace RecipesEverywhere.ViewModel
             }
         }
 
-        public Recipe RecipeModel => _recipeModelModel;
+        public Recipe RecipeModel => _recipeModel;
 
         public ICommand NavigateCommand { get; private set; }
+        public ICommand DeleteCommand { get; private set; }
         public ICommand RateCommand { get; private set; }
 
         private bool _updateVisibility;
@@ -44,11 +46,8 @@ namespace RecipesEverywhere.ViewModel
             get => _updateVisibility;
             private set
             {
-                if (_updateVisibility != value)
-                {
-                    _updateVisibility = value;
-                    OnPropertyChanged();
-                }
+                _updateVisibility = value;
+                OnPropertyChanged();
             }
         }
 
@@ -84,18 +83,20 @@ namespace RecipesEverywhere.ViewModel
             }
         }
 
-        public RecipePageViewModel(Recipe recipeModelModel)
+        public RecipePageViewModel(Recipe recipeModel)
         {
-            _recipeModelModel = recipeModelModel;
+            _recipeModel = recipeModel;
             _navigationService = NavigationService.Instance;
+
             NavigateCommand = new RelayCommand(Navigate);
             RateCommand = new RelayCommand(Rate);
-            UpdateVisibility = UserService.Instance.User.Id == recipeModelModel.AuthorId;
+            DeleteCommand = new RelayCommand(Delete);
+
 
             using (var context = new RecipeDbContext())
             {
                 AverageMark = (float)context.Marks
-                    .Where(m => m.RecipeId == _recipeModelModel.Id)
+                    .Where(m => m.RecipeId == _recipeModel.Id)
                     .Select(m => m.MarkValue)
                     .DefaultIfEmpty()
                     .Average();
@@ -110,7 +111,14 @@ namespace RecipesEverywhere.ViewModel
 
                 MarksVisibility = UsersMark == default;
             }
+            UpdateVisibility = UserService.Instance.IsAdmin || RecipeService.Instance.CurrenUserIsAuthor(_recipeModel);
 
+        }
+
+        private void Delete(object obj)
+        {
+            RecipeService.Instance.Delete(_recipeModel);
+            _navigationService.TryChangePage(nameof(Home));
         }
 
         private void Rate(object parameter)

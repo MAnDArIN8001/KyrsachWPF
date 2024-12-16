@@ -7,10 +7,7 @@
         <view:Home />
     </DataTemplate>
     
-    <DataTemplate DataType="{x:Type vm:SearchViewModel}">
-        <view:Search></view:Search>
-    </DataTemplate>
-    
+
     <DataTemplate DataType="{x:Type vm:UserViewModel}">
         <view:UserView></view:UserView>
     </DataTemplate>

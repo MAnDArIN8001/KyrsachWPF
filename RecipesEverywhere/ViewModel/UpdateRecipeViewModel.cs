@@ -102,11 +102,11 @@ namespace RecepiesEverywhere.ViewModel
         public UpdateRecipeViewModel(Recipe recipe)
         {
             _recipe = recipe;
-            CreateRecipeCommand = new RelayCommand(CreateRecipe);
+            CreateRecipeCommand = new RelayCommand(Update);
             LoadStatuses();
         }
 
-        private void CreateRecipe(object sender)
+        private void Update(object sender)
         {
 
             if (_recipe.Title.Trim().Length == 0
@@ -122,8 +122,7 @@ namespace RecepiesEverywhere.ViewModel
                 ExceptionMessage = "Something happens wrong"; //Мне лень тут что то делать
                 return;
             }
-            MessageBox.Show("Recipe created successfully!");
-
+            NavigationService.Instance.TryChangePage(nameof(RecipePage), _recipe);
 
         }
 

@@ -33,14 +33,7 @@
         <StackPanel Grid.Column="0" Style="{StaticResource Navigation}">
             <TextBlock Style="{StaticResource TitleText}" Margin="0, 0, 0, 20">Recipes Everywhere</TextBlock>
             
-            <StackPanel Style="{StaticResource NavigationButton}">
-                <StackPanel.InputBindings>
-                    <MouseBinding Gesture="LeftClick" 
-                                  Command="{Binding ChangeCurrentPageCommand}" CommandParameter="Search" />
-                </StackPanel.InputBindings>
-                
-                <TextBlock Style="{StaticResource NavigationText}" Text="Search recipe" />
-            </StackPanel>
+
             <StackPanel Style="{StaticResource NavigationButton}"
                         Visibility="{Binding IsAuthorized, Converter={StaticResource {x:Type system:Boolean}}}">
                 <StackPanel.InputBindings>

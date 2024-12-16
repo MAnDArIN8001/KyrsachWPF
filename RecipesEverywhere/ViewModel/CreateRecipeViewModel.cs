@@ -137,9 +137,7 @@ namespace RecepiesEverywhere.ViewModel
                 ExceptionMessage = "Something was wrong"; 
                 return;
             }
-            MessageBox.Show("Recipe created successfully!");
-
-
+            NavigationService.Instance.TryChangePage(nameof(RecipePage), recipe);
         }
     }
 }

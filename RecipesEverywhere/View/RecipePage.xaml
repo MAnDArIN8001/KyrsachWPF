@@ -45,8 +45,13 @@
                 </StackPanel>
 
                 <TextBlock Text="{Binding RecipeModel.Text}" Style="{StaticResource InformationText}" Margin="10" TextWrapping="Wrap"/>
-                <Button Style="{StaticResource SubmitButton}" Command="{Binding NavigateCommand}" Content="Update" Width="50" Height="25"
+                <StackPanel Orientation="Horizontal">
+                    <Button Style="{StaticResource SubmitButton}" Command="{Binding DeleteCommand}" Content="Delete" Width="50" Height="25"
                         Visibility="{Binding UpdateVisibility, Converter={StaticResource {x:Type system:Boolean}}}"/>
+                    <Button Style="{StaticResource SubmitButton}" Command="{Binding NavigateCommand}" Content="Update" Width="50" Height="25"
+                        Visibility="{Binding UpdateVisibility, Converter={StaticResource {x:Type system:Boolean}}}"/>
+                </StackPanel>
+
             </StackPanel>
 
         </ScrollViewer>

@@ -10,6 +10,7 @@ using RecepiesEverywhere.Annotations;
 using RecepiesEverywhere.Models;
 using RecipesEverywhere.Model;
 using RecipesEverywhere.Model.DTO;
+using RecipesEverywhere.Model.Enum;
 using RecipesEverywhere.Utilites;
 using RecipesEverywhere.View;
 
@@ -29,6 +30,7 @@ namespace RecipesEverywhere.Services
 
         private User _user;
         public bool IsAuthorized => User.Name != null;
+        public bool IsAdmin => User.RoleId == (int)RoleEnum.Admin;
         public User User
         {
             get => _user ??= new User();

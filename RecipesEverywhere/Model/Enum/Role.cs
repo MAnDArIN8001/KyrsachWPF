@@ -2,7 +2,7 @@
 
 namespace RecipesEverywhere.Model.Enum
 {
-    public enum Role
+    public enum RoleEnum
     {
         User = 1,
         Admin = 2

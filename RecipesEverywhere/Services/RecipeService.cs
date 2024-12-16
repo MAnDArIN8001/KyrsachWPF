@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Documents;
 using Microsoft.EntityFrameworkCore;
 using RecepiesEverywhere.Models;
@@ -24,7 +25,14 @@ namespace RecipesEverywhere.Services
         #endregion
         public User user => UserService.Instance.User;
         private RecipeService() { }
-        private bool FilterAvailableRecipes(Recipe recipe) => user.Id == recipe.AuthorId || recipe.StatusId == (int)StatusEnum.Public;
+        private bool FilterAvailableRecipes(Recipe recipe) => CurrenUserIsAuthor(recipe) || recipe.StatusId == (int)StatusEnum.Public;
+
+        public bool CurrenUserIsAuthor(Recipe recipe) => user.Id == recipe.AuthorId;
+
+        private bool PermissionToCRUT(Recipe recipe) => CurrenUserIsAuthor(recipe) || UserService.Instance.IsAdmin;
+
+        
+
         public List<Recipe> LoadAll()
         {
             using (var context = new RecipeDbContext())
@@ -46,7 +54,7 @@ namespace RecipesEverywhere.Services
         public async Task<Response<List<Recipe>>> LoadRecipeByTitleAsync(string title)
         {
             Response<List<Recipe>> response = new();
-            
+
             try
             {
                 using (var context = new RecipeDbContext())
@@ -57,7 +65,7 @@ namespace RecipesEverywhere.Services
 
                     response.Success = true;
                     response.Data = recipes;
-                    
+
                     return response;
                 }
             }
@@ -70,7 +78,7 @@ namespace RecipesEverywhere.Services
             }
         }
 
-        public  List<Recipe> LoadPostsFromUser(int userId)
+        public List<Recipe> LoadPostsFromUser(int userId)
         {
 
             using (var context = new RecipeDbContext())
@@ -79,7 +87,7 @@ namespace RecipesEverywhere.Services
 
                 if (recipesOfUser is null)
                 {
-                    throw new Exception("User dont have any recipes");
+                    throw new Exception("User don't have any recipes");
                 }
                 return recipesOfUser;
             }
@@ -117,21 +125,63 @@ namespace RecipesEverywhere.Services
 
             using (var context = new RecipeDbContext())
             {
-                context.Add(recipe);
-                context.SaveChanges();
+                try
+                {
+                    context.Add(recipe);
+                    context.SaveChanges();
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    return false;
+                }
+
+            }
+            return true;
+        }
+        internal bool Delete(Recipe recipe)
+        {
+            if (recipe.AuthorId == null && PermissionToCRUT(recipe))
+                return false;
+
+            using (var context = new RecipeDbContext())
+            {
+                try
+                {
+                    // Удаляем связанные записи в таблице Marks
+                    var marksToDelete = context.Marks.Where(m => m.RecipeId == recipe.Id);
+                    context.Marks.RemoveRange(marksToDelete);
+
+                    // Удаляем рецепт
+                    context.Remove(recipe);
+                    context.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    return false;
+                }
 
             }
             return true;
         }
         internal bool Update(Recipe recipe)
         {
-            if (recipe.AuthorId == null)
+            if (recipe.AuthorId == null && PermissionToCRUT(recipe))
                 return false;
 
             using (var context = new RecipeDbContext())
             {
-                context.Update(recipe);
-                context.SaveChanges();
+                try
+                {
+                    context.Update(recipe);
+                    context.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    return false;
+                }
             }
             return true;
         }
@@ -140,12 +190,20 @@ namespace RecipesEverywhere.Services
         {
             using (var context = new RecipeDbContext())
             {
-                query = query.ToLower();
-                var recipes = context.Recipes
-                    .Where(FilterAvailableRecipes)
-                    .Where(recipeDb => recipeDb.Title.ToLower().Contains(query))
-                    .ToList();
-                return recipes;
+                try
+                {
+                    query = query.ToLower();
+                    var recipes = context.Recipes
+                        .Where(FilterAvailableRecipes)
+                        .Where(recipeDb => recipeDb.Title.ToLower().Contains(query))
+                        .ToList();
+                    return recipes;
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    return null;
+                }
             }
         }
     }

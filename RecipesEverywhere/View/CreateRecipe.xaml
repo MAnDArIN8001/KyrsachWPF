@@ -32,6 +32,7 @@
                       SelectedValue="{Binding StatusId}"  />
 
             <Button Content="Create Recipe" Style="{StaticResource SubmitButton}" Command="{Binding CreateRecipeCommand}" />
+
             <TextBlock Text="{Binding ExceptionMessage, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputLabel}" HorizontalAlignment="Center" Foreground="Brown"/>
 
         </StackPanel>
